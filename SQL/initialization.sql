@@ -12,7 +12,7 @@ CREATE TABLE Hotel (
     contactEmail VARCHAR(255),
     phoneNumber VARCHAR(20),
     numberOfRooms INT CHECK (numberOfRooms >= 0),
-    rating INT CHECK (1 <= rating <= 5),
+    rating INT CHECK (rating BETWEEN 1 AND 5),
     chainName VARCHAR(255) NOT NULL,
 	managerID TEXT UNIQUE,
     PRIMARY KEY (address),
