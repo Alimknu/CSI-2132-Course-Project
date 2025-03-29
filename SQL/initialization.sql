@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Room (
     price float,
     amenities VARCHAR(255),
     problems VARCHAR(255),
-    extendable BOOLEAN,
+    extendable BOOLEAN, -- boolean because it's a yes or no
     viewType VARCHAR(255),
     capacity INT,
     hotelAddress VARCHAR(255) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Employee (
 	SSN TEXT NOT NULL UNIQUE CHECK (SSN ~ '^[0-9]{9}$'),
 	fullName VARCHAR(255),
 	address VARCHAR(255),
-	jobPosition VARCHAR(255),
+	jobPosition VARCHAR(255), -- changed from position to jobPosition as `position` seems to be a keyword in SQL
 	hotelID VARCHAR(255) NOT NULL,
 	PRIMARY KEY (SSN)
 );
@@ -83,7 +83,7 @@ ADD FOREIGN KEY (managerID) REFERENCES Employee (SSN) ON DELETE SET NULL;
 ALTER TABLE Employee
 ADD FOREIGN KEY (hotelID) REFERENCES Hotel (address) ON DELETE SET NULL;
 
-/* FUNCTION DEFINITIONS */
+/* TRIGGER AND FUNCTION DEFINITIONS */
 
 CREATE OR REPLACE FUNCTION set_hotel_manager()
 RETURNS TRIGGER AS $$
@@ -102,15 +102,33 @@ AFTER INSERT ON EMPLOYEE
 FOR EACH ROW
 EXECUTE FUNCTION set_hotel_manager();
 
+CREATE OR REPLACE FUNCTION calculate_hotel_count()
+RETURNS TRIGGER AS $$
+BEGIN
+	UPDATE HotelChain
+	SET numberOfHotels = (
+		SELECT COUNT(*)
+		FROM Hotel currentHotel
+		WHERE currentHotel.chainName = NEW.chainName
+	);
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_hotel_count_trigger
+AFTER INSERT ON HOTEL
+FOR EACH STATEMENT -- Will call this function on a statement which means it will trigger in the same way, just less frequently so it isn't constantly running this function for n hotels inserted
+EXECUTE FUNCTION calculate_hotel_count();
+
 /* DATA INSERTIONS */
 
 /* Hotel Chains */
 INSERT INTO HotelChain (chainName, address, numberOfHotels, contactEmail, phoneNumber) VALUES
-('Marriotte International', '100 Marriotte Blvd, Bethesda, MD', 8, 'contact@marriotte.com', '800-123-4567'),
-('Hyatt Regency Inn', '200 Hyatt Lane, Chicago, IL', 8, 'info@hyattregency.com', '888-234-5678'),
-('Hiltun Hotels', '300 Hiltun Ave, McLean, VA', 8, 'support@hiltun.com', '877-345-6789'),
-('Sheratun Group', '400 Sheratun Rd, Phoenix, AZ', 8, 'hello@sheratun.com', '866-456-7890'),
-('InterConti Resorts', '500 InterConti Dr, Denham, UK', 8, 'resorts@interconti.com', '855-567-8901');
+('Marriotte International', '100 Marriotte Blvd, Bethesda, MD', 0, 'contact@marriotte.com', '800-123-4567'),
+('Hyatt Regency Inn', '200 Hyatt Lane, Chicago, IL', 0, 'info@hyattregency.com', '888-234-5678'),
+('Hiltun Hotels', '300 Hiltun Ave, McLean, VA', 0, 'support@hiltun.com', '877-345-6789'),
+('Sheratun Group', '400 Sheratun Rd, Phoenix, AZ', 0, 'hello@sheratun.com', '866-456-7890'),
+('InterConti Resorts', '500 InterConti Dr, Denham, UK', 0, 'resorts@interconti.com', '855-567-8901');
 
 /* Hotels */
 
