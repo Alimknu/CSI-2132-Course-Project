@@ -117,7 +117,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER update_hotel_count_trigger
 AFTER INSERT ON HOTEL
-FOR EACH STATEMENT -- Will call this function on a statement which means it will trigger in the same way, just less frequently so it isn't constantly running this function for n hotels inserted
+FOR EACH ROW
 EXECUTE FUNCTION calculate_hotel_count();
 
 /* DATA INSERTIONS */
