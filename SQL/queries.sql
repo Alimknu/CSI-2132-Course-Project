@@ -1,4 +1,3 @@
-
 -- Query 1: List all managers, their hotels, and contact information
 SELECT Employee.fullName AS managerName, hotelID, contactEmail, phoneNumber
 FROM Employee
@@ -38,3 +37,30 @@ CREATE INDEX idx_room_view_price ON Room (view, price);
 -- This index allows us to quickly find hotels by their ratings. This is useful for customers who want to look through hotels in a specific rating range.
 -- Example: "Find hotels with a rating of 4 stars or higher"
 CREATE INDEX idx_hotel_rating ON Hotel (rating);
+
+-- VIEWS
+-- View 1: Number of available rooms per area (based on hotel address)
+CREATE OR REPLACE VIEW AvailableRoomsPerArea AS
+SELECT 
+    SUBSTRING(Hotel.address FROM '^([^,]+)') AS area,
+    COUNT(Room.roomNumber) AS available_rooms
+FROM Hotel
+JOIN Room ON Hotel.address = Room.hotelAddress
+WHERE Room.roomNumber NOT IN (
+    SELECT roomNumber 
+    FROM Booking 
+    WHERE CURRENT_DATE BETWEEN startDate AND endDate
+)
+GROUP BY SUBSTRING(Hotel.address FROM '^([^,]+)');
+
+-- View 2: Aggregated capacity of all rooms for each hotel
+CREATE OR REPLACE VIEW HotelRoomCapacity AS
+SELECT 
+    Hotel.address AS hotel_address,
+    Hotel.chainName AS hotel_chain,
+    COUNT(Room.roomNumber) AS total_rooms,
+    SUM(Room.capacity) AS total_capacity,
+    AVG(Room.capacity) AS average_room_capacity
+FROM Hotel
+JOIN Room ON Hotel.address = Room.hotelAddress
+GROUP BY Hotel.address, Hotel.chainName;

@@ -1,1 +1,5 @@
 SQL/dropTablesCommand.sql
+/venv
+backend/venv/
+backend/app/venv
+backend/app/test_db.py
