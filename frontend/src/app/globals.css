@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@layer base {
+  html {
+    @apply font-sans antialiased;
+  }
+  
+  body {
+    @apply bg-white text-gray-900;
+  }
+
+  h1 {
+    @apply text-3xl font-bold text-gray-900;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold text-gray-900;
+  }
+
+  h3 {
+    @apply text-xl font-semibold text-gray-900;
+  }
+
+  label {
+    @apply text-sm font-semibold text-gray-700;
+  }
+}
+
+@layer components {
+  /* Button styles */
+  .btn {
+    @apply px-5 py-2.5 rounded-lg font-medium border-2 transition-all duration-200 text-base;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 text-white border-primary-600 
+           hover:bg-primary-700 hover:border-primary-700 
+           active:bg-primary-800 active:border-primary-800;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-primary-600 border-primary-600
+           hover:bg-primary-50 hover:text-primary-700 hover:border-primary-700
+           active:bg-primary-100;
+  }
+
+  /* Input and Select styles */
+  .input {
+    @apply px-4 py-3 rounded-lg border-2 border-gray-300 text-base
+           focus:border-primary-500 focus:ring-2 focus:ring-primary-100 
+           outline-none transition-all duration-200 min-h-[3rem]
+           shadow-sm;
+  }
+
+  .select {
+    @apply px-4 py-3 rounded-lg border-2 border-gray-300 text-base
+           focus:border-primary-500 focus:ring-2 focus:ring-primary-100 
+           outline-none transition-all duration-200 min-h-[3rem]
+           shadow-sm appearance-none bg-white;
+  }
+
+  /* Form styles */
+  .form-control {
+    @apply mb-6;
+  }
+
+  .form-label {
+    @apply block text-sm font-semibold text-gray-700 mb-2;
+  }
+
+  .form-helper {
+    @apply mt-2 text-sm text-gray-600;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-xl border-2 border-gray-200 
+           p-6 shadow-sm hover:shadow-md transition-all duration-200;
+  }
+
+  /* Navigation styles */
+  .nav-link {
+    @apply px-4 py-2 rounded-lg text-gray-700 font-medium
+           hover:text-primary-600 hover:bg-primary-50 
+           transition-all duration-200;
+  }
+
+  .nav-link-active {
+    @apply text-primary-600 bg-primary-50 font-semibold;
+  }
+
+  /* Header styles */
+  .page-header {
+    @apply text-2xl font-bold mb-6 text-gray-900;
+  }
+
+  /* Section styles */
+  .section {
+    @apply py-6 px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Hero section */
+  .hero {
+    @apply py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary-600 to-primary-700;
+  }
+
+  .hero-content {
+    @apply max-w-4xl mx-auto text-white;
+  }
+
+  /* Container styles */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Table styles */
+  .table-container {
+    @apply rounded-xl border-2 border-gray-200 overflow-hidden shadow-sm;
+  }
+
+  .table {
+    @apply min-w-full divide-y-2 divide-gray-100;
+  }
+
+  .table-header {
+    @apply bg-gray-50 px-6 py-3.5 text-left text-sm font-semibold text-gray-700;
+  }
+
+  .table-cell {
+    @apply px-6 py-4 text-sm text-gray-900 border-b border-gray-200;
+  }
+
+  /* Custom hover effects */
+  .hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-1;
+  }
+
+  .hover-shadow {
+    @apply transition-shadow duration-200 hover:shadow-lg;
+  }
+
+  /* Top bar specific styles */
+  .top-bar {
+    @apply bg-white border-b-2 border-gray-200 fixed w-full top-0 z-50 shadow-sm;
+  }
+
+  .top-bar-inner {
+    @apply container-custom h-14 flex items-center justify-between;
+  }
+
+  .top-bar-nav {
+    @apply flex space-x-4;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+
+  .card {
+    @apply bg-gray-900 border-gray-800;
+  }
+
+  .top-bar {
+    @apply bg-gray-900 border-gray-800;
+  }
+
+  .nav-link {
+    @apply text-gray-300 hover:text-primary-400 hover:bg-gray-800;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-800 text-gray-200 hover:bg-gray-700;
+  }
+
+  .input, .select {
+    @apply bg-gray-900 border-gray-700 text-gray-200;
+  }
+
+  .form-label {
+    @apply text-gray-300;
+  }
+
+  .form-helper {
+    @apply text-gray-400;
+  }
+
+  .table-container {
+    @apply border-gray-800 bg-gray-900;
+  }
+
+  .table {
+    @apply divide-gray-800;
+  }
+
+  .table-header {
+    @apply bg-gray-900 text-gray-400;
+  }
+
+  .table-cell {
+    @apply text-gray-300 border-gray-800;
+  }
+}
